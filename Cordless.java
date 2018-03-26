@@ -11,15 +11,17 @@ import java.util.ArrayList;
     /** ArrayList of all telephones that are added  */
     private static ArrayList<Telephone> phones = new ArrayList<Telephone>();
 
+    /**
+     * Main calls everything that is sick brah.
+     * @param args any commmand line arguments.
+     */
     public static void main (String[] args){
 
         Scanner sc = new Scanner(System.in);
         while (sc.hasNextLine()) {
             String line = sc.nextLine();
             if (!(line.equals("Telephone sites"))) {
-                
                 double[] input = new double[2];
-
                 String[] lineArray = line.split(" ");
 
                 // Convert each string input to a double, else output to StdErr
