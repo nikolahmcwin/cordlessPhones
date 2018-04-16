@@ -1,15 +1,21 @@
+package telephone;
+
 import java.util.Scanner;
 import java.util.ArrayList;
 
 /**
  * Cordless Telephones Group Etude 8.
+ *
  * @author Kiri Lenagh-Glue, Megan Seto, Nikolah Pearce and Megan Hayes.
  */
 
- public class Cordless {
+ public class TelephoneApp {
 
     /** ArrayList of all telephones that are added  */
     private static ArrayList<Telephone> phones = new ArrayList<Telephone>();
+
+    private static double maxEast = 0;
+    private static double maxNorth = 0;
 
     /**
      * Main calls everything that is sick brah.
@@ -38,11 +44,29 @@ import java.util.ArrayList;
 
                 // Add the phone to the ArrayList
                 phones.add(phone);
-
-                //System.out.println(phone.toString());
-
             }
         }
+
+        // Finish set up and print out that we have set up
+        for (Telephone phone : phones) {
+
+            double east = phone.getEast();
+            double north = phone.getNorth();
+
+            // Set the two static maximum variables
+            if (east > maxEast) {
+                maxEast = east;
+            }
+            if (north > maxNorth) {
+                maxNorth = north;
+            }
+            System.out.println(phone.toString());
+        }
+
+        Range rangeChecker = new Range(0 ,0, phones, maxEast, maxNorth);
+        rangeChecker.calculateRange();
+
     }
+
 
  }
