@@ -1,8 +1,12 @@
+
 import kdtree
+import sys
 
 """ Cordless Phones
+    Takes a set of points and finds the maximum range of only 11.
+    Utilises Nearest Neighbour search and KD trees.
     Etude 8 COSC326 2018
-    @author Nikolah, Kiri, Megan and Meg.
+    @author Nikolah Peaerce, Megan Seto, Kiri Lenagh-Glue, & Megan Hayes.
 """
 
 #
@@ -14,7 +18,6 @@ def print_if_balanced(tree):
         print("Tree is balanced! :)")
     else:
         print("Tree is not balanced :(")
-
 
 #
 # Take in a KDNode and return its coordinates
@@ -36,6 +39,10 @@ def pull_coordinate(node):
 
     return pts
 
+#
+# Take in a list of KDNodess and return a list of the coordinates only
+# Coordinates returns as list of [[x, y], [x, y]]
+#
 def pull_all_coordinates(all_nodes):
     i = 0
     nn_points = []
@@ -45,10 +52,45 @@ def pull_all_coordinates(all_nodes):
         i+=1
     return nn_points
 
+#
+# Loop through every point and check its K neighbours.
+# Keep track of which point has the smallest largest distance.
+# Return a list [[x, y], [x, y]] of these minimum points.
+#
+def find_smallest_set(tree, max_phones, points):
+    #Set the two arrays as arbitrarily the first check
+    n = points[0]
+    print("The point first is", n)
+    print("Points:", n[0], n[1])
 
+    # 2D array [[node, dist], [node, dist]]
+    min_set_nodes = tree.search_knn(n, max_phones)
+    # 2D array [[x, y], [x, y]]
+    min_set_points = pull_all_coordinates(min_set_nodes)
+    
+    i = 1
+    while i < len(points):
+        curr_pt = points[i]
+        curr_nn_nodes = tree.search_knn(curr_pt, max_phones)
+
+        # if the last distance in this point, is less than the current minimum last distance
+        if curr_nn_nodes[len(curr_nn_nodes) - 1][1] < min_set_nodes[len(curr_nn_nodes) - 1][1]:
+            # Copy all of these points and set them as the current min
+            min_set_points = pull_all_coordinates(curr_nn_nodes)
+            min_set_nodess = curr_nn_nodes
+        i+=1
+
+    print("MINIMUM SET OF THE NODES:", min_set_nodes, sep="\n")
+    return min_set_points
+
+
+#
+# Main method runs all the input and methods called.
+#
 def main():
     #Make a list of point lists
     points = []
+    max_phones = 12
 
     #Loop until no further input, adding in each point
     while (True):
@@ -69,34 +111,36 @@ def main():
         #print("East:", y, "and North:", x)
 
     #print(points)
+
+    # If there aren't enough points, abort the check
+    if len(points) < 12:
+        print("Range is infinite! There are less than the maximum 12 phones.")
+        sys.exit(0)
+
     tree = kdtree.create(points)
-
-    '''
-    #Alternately make a blank tree and then add points.
-    tree = kdtree.create(dimensions=2)
-
-    points_length = len(points)
-    i = 0
-    while i < points_length:
-        tree.add(points[i])
-        i+=1
-    '''
     #kdtree.visualize(tree)
     #inord_tree = list(tree.inorder())
     #print(inord_tree)
 
+    #print_if_balanced(tree)
+
+    minimum_nn = find_smallest_set(tree, max_phones, points)
+    print("\nThe minimum points OF EVERYTHING found:", minimum_nn, sep="\n")
+
+'''
+    # Test cases for the inital NN search and KNN search.
     pt = [125.13,122.56]
     #nn_node = tree.search_nn(pt)
     #print("Nearest Neighbour is:\n", nn_node, sep="")
-    
-    all_nn_nodes = tree.search_knn(pt, 3)
-    print("Nearest Neighbours are:\n", all_nn_nodes, sep="")
-        
-    #print_if_balanced(tree)
 
+    all_nn_nodes = tree.search_knn(pt, 3)
+    #all_nn_nodes = tree.search_knn(pt, max_phones)
  
     nn_points = pull_all_coordinates(all_nn_nodes)
     print("The nearest neighbour points are:\n", nn_points, sep="")
+'''
+
+    
 
 
 if __name__ == '__main__':

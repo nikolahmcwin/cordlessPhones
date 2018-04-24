@@ -388,7 +388,7 @@ class KDNode(Node):
         # We have edited this 24/4/18 to convert to a float to prevent a weird error we received.
         # Unsupported operand type -: 'str' and 'int'
         #
-        return math.pow(float(self.data[axis]) - point[axis], 2)
+        return math.pow(float(self.data[axis]) - float(point[axis]), 2)
 
 
     def dist(self, point):
@@ -458,11 +458,19 @@ class KDNode(Node):
         split_plane = float(self.data[self.axis])
         # get the squared distance between the point and the splitting plane
         # (squared since all distances are squared).
-        plane_dist = point[self.axis] - split_plane
+        #
+        # We have edited this 24/4/18 to convert to a float to prevent a weird error we received.
+        # Unsupported operand type -: 'str' and 'int'
+        #
+        plane_dist = float(point[self.axis]) - split_plane
         plane_dist2 = plane_dist * plane_dist
 
         # Search the side of the splitting plane that the point is in
-        if point[self.axis] < split_plane:
+        #
+        # We have edited this 24/4/18 to convert to a float to prevent a weird error we received.
+        # Unsupported operand type -: 'str' and 'int'
+        #
+        if float(point[self.axis]) < split_plane:
             if self.left is not None:
                 self.left._search_node(point, k, results, get_dist, counter)
         else:
@@ -476,7 +484,7 @@ class KDNode(Node):
             # We have edited this 24/4/18 to convert to a float to prevent a weird error we received.
             # Unsupported operand type -: 'str' and 'int'
             #
-            if point[self.axis] < float(self.data[self.axis]):
+            if float(point[self.axis]) < float(self.data[self.axis]):
                 if self.right is not None:
                     self.right._search_node(point, k, results, get_dist,
                                             counter)
