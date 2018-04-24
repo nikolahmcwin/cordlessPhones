@@ -67,7 +67,7 @@ def find_smallest_set(tree, max_phones, points):
     min_set_nodes = tree.search_knn(n, max_phones)
     # 2D array [[x, y], [x, y]]
     min_set_points = pull_all_coordinates(min_set_nodes)
-    
+
     i = 1
     while i < len(points):
         curr_pt = points[i]
@@ -77,12 +77,36 @@ def find_smallest_set(tree, max_phones, points):
         if curr_nn_nodes[len(curr_nn_nodes) - 1][1] < min_set_nodes[len(curr_nn_nodes) - 1][1]:
             # Copy all of these points and set them as the current min
             min_set_points = pull_all_coordinates(curr_nn_nodes)
-            min_set_nodess = curr_nn_nodes
+            min_set_nodes = curr_nn_nodes
         i+=1
 
-    print("MINIMUM SET OF THE NODES:", min_set_nodes, sep="\n")
+    #print("MINIMUM SET OF THE NODES:", min_set_nodes, sep="\n")
     return min_set_points
 
+#
+# Takes a set of points and turns them into the smallest enclosing circle.
+#
+def find_smallest_circle(points):
+    '''
+    algorithm welzl: #PSEUDO CODE FROM WIKIPEDIA
+    
+    input: Finite sets P and R of points in the plane
+    output: Minimal disk enclosing P with R on the boundary, or undefined if no such disk exists
+    if P is empty or |R| ≥ 3:
+        if the points of R are cocircular:
+            return the ball they determine
+        else:
+            return undefined
+
+    choose p in P (randomly and uniformly)
+    D := welzl(P - { p }, R)
+    if p is in D:
+        return D
+    return welzl(P - { p }, R ∪ { p })
+    '''
+    range = 0
+
+    return range
 
 #
 # Main method runs all the input and methods called.
@@ -124,8 +148,11 @@ def main():
 
     #print_if_balanced(tree)
 
-    minimum_nn = find_smallest_set(tree, max_phones, points)
-    print("\nThe minimum points OF EVERYTHING found:", minimum_nn, sep="\n")
+    minimum_nn_points = find_smallest_set(tree, max_phones, points)
+    print("\nThe minimum points OF EVERYTHING found:", minimum_nn_points, sep="\n")
+
+    answer = find_smallest_circle(minimum_nn_points)
+    print("Range found:", answer)
 
 '''
     # Test cases for the inital NN search and KNN search.
