@@ -384,7 +384,11 @@ class KDNode(Node):
         Squared distance at the given axis between
         the current Node and the given point
         """
-        return math.pow(self.data[axis] - point[axis], 2)
+        #
+        # We have edited this 24/4/18 to convert to a float to prevent a weird error we received.
+        # Unsupported operand type -: 'str' and 'int'
+        #
+        return math.pow(float(self.data[axis]) - point[axis], 2)
 
 
     def dist(self, point):
@@ -447,7 +451,11 @@ class KDNode(Node):
         else:
             heapq.heappush(results, item)
         # get the splitting plane
-        split_plane = self.data[self.axis]
+        #
+        # We have edited this 24/4/18 to convert to a float to prevent a weird error we received.
+        # Unsupported operand type -: 'str' and 'int'
+        #
+        split_plane = float(self.data[self.axis])
         # get the squared distance between the point and the splitting plane
         # (squared since all distances are squared).
         plane_dist = point[self.axis] - split_plane
@@ -464,7 +472,11 @@ class KDNode(Node):
         # Search the other side of the splitting plane if it may contain
         # points closer than the farthest point in the current results.
         if -plane_dist2 > results[0][0] or len(results) < k:
-            if point[self.axis] < self.data[self.axis]:
+            #
+            # We have edited this 24/4/18 to convert to a float to prevent a weird error we received.
+            # Unsupported operand type -: 'str' and 'int'
+            #
+            if point[self.axis] < float(self.data[self.axis]):
                 if self.right is not None:
                     self.right._search_node(point, k, results, get_dist,
                                             counter)

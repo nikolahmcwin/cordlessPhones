@@ -36,11 +36,13 @@ def main():
     while i < points_length:
         tree.add(points2D[i])
         i+=1
+   
     kdtree.visualize(tree)
     print(list(tree.inorder()))
     #tree.search_knn([50, 25], 4)
-    pt = [40, 50]
-    #result = tree.search_nn(pt)
+    pt = [125.13,122.56]
+    result = tree.search_knn(pt, 3)
+    print("Nearest Neighbours are:\n", result, sep="")
         
     b = tree.is_balanced
     if b:
