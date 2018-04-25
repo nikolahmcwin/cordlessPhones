@@ -1,6 +1,7 @@
 
 import kdtree
 import sys
+import smallestcircle
 
 """ Cordless Phones
     Takes a set of points and finds the maximum range of only 11.
@@ -8,16 +9,6 @@ import sys
     Etude 8 COSC326 2018
     @author Nikolah Peaerce, Megan Seto, Kiri Lenagh-Glue, & Megan Hayes.
 """
-
-#
-# Print out the test if the tree is balanced or not
-#
-def print_if_balanced(tree):
-    b = tree.is_balanced
-    if b:
-        print("Tree is balanced! :)")
-    else:
-        print("Tree is not balanced :(")
 
 #
 # Take in a KDNode and return its coordinates
@@ -57,7 +48,7 @@ def pull_all_coordinates(all_nodes):
 # Keep track of which point has the smallest largest distance.
 # Return a list [[x, y], [x, y]] of these minimum points.
 #
-def find_smallest_set(tree, max_phones, points):
+def find_minimum_set(tree, max_phones, points):
     #Set the two arrays as arbitrarily the first check
     n = points[0]
     print("The point first is", n)
@@ -88,10 +79,13 @@ def find_smallest_set(tree, max_phones, points):
 #
 def find_smallest_circle(points):
     '''
+    megiddo algorithm:
+    welzl algoirthm:
     algorithm welzl: #PSEUDO CODE FROM WIKIPEDIA
     
     input: Finite sets P and R of points in the plane
     output: Minimal disk enclosing P with R on the boundary, or undefined if no such disk exists
+    
     if P is empty or |R| ≥ 3:
         if the points of R are cocircular:
             return the ball they determine
@@ -137,8 +131,8 @@ def main():
     #print(points)
 
     # If there aren't enough points, abort the check
-    if len(points) < 12:
-        print("Range is infinite! There are less than the maximum 12 phones.")
+    if len(points) < max_phones:
+        print("Range is infinite! There are less than the maximum", max_phones, " phones.")
         sys.exit(0)
 
     tree = kdtree.create(points)
@@ -147,27 +141,26 @@ def main():
     #print(inord_tree)
 
     #print_if_balanced(tree)
-
-    minimum_nn_points = find_smallest_set(tree, max_phones, points)
+    pt = [125.13,122.56]
+    nn_node = tree.search_nn(pt)
+    print("Nearest Neighbour is:\n", nn_node, sep="")
+    minimum_nn_points = find_minimum_set(tree, max_phones, points)
     print("\nThe minimum points OF EVERYTHING found:", minimum_nn_points, sep="\n")
 
-    answer = find_smallest_circle(minimum_nn_points)
-    print("Range found:", answer)
+    #answer = find_smallest_circle(minimum_nn_points)
+    #print("Range found:", answer)
 
-'''
-    # Test cases for the inital NN search and KNN search.
-    pt = [125.13,122.56]
-    #nn_node = tree.search_nn(pt)
-    #print("Nearest Neighbour is:\n", nn_node, sep="")
+    copy = minimum_nn_points[:]
 
-    all_nn_nodes = tree.search_knn(pt, 3)
-    #all_nn_nodes = tree.search_knn(pt, max_phones)
- 
-    nn_points = pull_all_coordinates(all_nn_nodes)
-    print("The nearest neighbour points are:\n", nn_points, sep="")
-'''
+    #circle = smallestcircle()
+    c = smallestcircle.make_circle(copy)
+    print("Range found\nx:", c[0], "y:", c[1], "diameter", c[2])
 
-    
+    # Reduce by some arbitrarily small amount to go from min of 12 to max of at most 11
+    diameter = c[2]
+    diameter -= 1
+    print("New diamter found! Diameter:", diameter)
+
 
 
 if __name__ == '__main__':
