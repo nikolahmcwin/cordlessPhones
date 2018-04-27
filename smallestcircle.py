@@ -22,7 +22,6 @@
 import math, random
 
 
-
 # Data conventions: A point is a pair of floats (x, y). A circle is a triple of floats (center x, center y, radius).
 
 # Returns the smallest circle that encloses all the given points. Runs in expected O(n) time, randomized.

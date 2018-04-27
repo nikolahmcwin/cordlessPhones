@@ -154,12 +154,12 @@ def main():
 
     #circle = smallestcircle()
     c = smallestcircle.make_circle(copy)
-    print("Range found\nx:", c[0], "y:", c[1], "diameter", c[2])
+    print("Range found\nx:", c[0], "y:", c[1], "r:", c[2])
 
     # Reduce by some arbitrarily small amount to go from min of 12 to max of at most 11
-    diameter = c[2]
-    diameter -= 1
-    print("New diamter found! Diameter:", diameter)
+    r = c[2]
+    true_r = (r - 0.1)
+    print("New radius found! Radius:", true_r)
 
 
 
