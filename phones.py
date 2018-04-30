@@ -51,8 +51,6 @@ def pull_all_coordinates(all_nodes):
 def find_minimum_set(tree, max_phones, points):
     #Set the two arrays as arbitrarily the first check
     n = points[0]
-    print("The point first is", n)
-    print("Points:", n[0], n[1])
 
     # 2D array [[node, dist], [node, dist]]
     min_set_nodes = tree.search_knn(n, max_phones)
@@ -71,7 +69,6 @@ def find_minimum_set(tree, max_phones, points):
             min_set_nodes = curr_nn_nodes
         i+=1
 
-    #print("MINIMUM SET OF THE NODES:", min_set_nodes, sep="\n")
     return min_set_points
 
 #
@@ -81,32 +78,25 @@ def find_minimum_set(tree, max_phones, points):
 # Return a list [[r1], [r2]] of these radii.
 #
 def find_radii_set(tree, max_phones, points):
-    #Set the two arrays as arbitrarily the first check
-    n = points[0]
-    # 2D array [[node, dist], [node, dist]] of the knn of the point we are checking
-    #curr_nn_nodes = tree.search_knn(n, max_phones)
-    # 2D array [[x, y], [x, y]] of the points of these knn
-    #curr_points = pull_all_coordinates(curr_nn_nodes)
-
     all_r = []
-
     i = 0
+
     while i < len(points):
         curr_pt = points[i]
+        
+        # 2D array [[node, dist], [node, dist]] of the knn of the point we are checking
         curr_nn_nodes = tree.search_knn(curr_pt, max_phones)
+        
+        # 2D array [[x, y], [x, y]] of the points of these knn
         curr_points = pull_all_coordinates(curr_nn_nodes)
 
         copy = curr_points[:]
         c = smallestcircle.make_circle(copy)
 
-        #curr_r = c[2]
         all_r.append(c)
-        
-        #all_r.append(curr_r)
         i+=1
 
     return all_r
-
 
 #
 # Main method runs all the input and methods called.
@@ -134,15 +124,16 @@ def main():
         y = p[1]
         #print("Telephone added at (", x, ", ", y, ")", sep="")
 
-    #print(points)
-
     # If there aren't enough points, abort the check
     if len(points) < max_phones:
-        print("Range is infinite! There are less than the maximum", max_phones, " phones.")
+        print("Range is infinite! There are less than the maximum", max_phones, "phones.")
         sys.exit(0)
 
+    # Add all the points into a kd tree
     tree = kdtree.create(points)
+
     '''
+    # This is our original (incorrect) method of finding the minimum knn and then the circle
     minimum_nn_points = find_minimum_set(tree, max_phones, points)
     print("\nOG METHOD.\nThe minimum points OF EVERYTHING found:", minimum_nn_points, sep="\n")
 
@@ -160,23 +151,24 @@ def main():
     print("OG METHOD.\nNew radius found! Radius:", true_rog)
     '''
     
-    # list of all POSSIBLE radi
+    # Find the set of all smallest enclosing circles of knn points
     all_radii = find_radii_set(tree, max_phones, points)
     min_r = all_radii[0]
 
-    #find the minimum radius
+    # Loop through the set to find the MINIMUM smallest enclosing circle of knn
     i = 0
-
     while i < len(all_radii):
         curr_r = all_radii[i]
         if curr_r[2] < min_r[2]:
             min_r = curr_r
         i += 1
+
     print("Smallest enlosing circle found!")
     print("x:", min_r[0], "\ny:", min_r[1], "\nr:", min_r[2])
 
     # Decrease minimum of 12 to get maximum of 11
     max_eleven = (min_r[2] - 0.1)
+
     print("\nGotta remove that 12th point though..\nRange now:", max_eleven)
     print("\nMaximum range:", "%0.2f" % max_eleven, "metres")
 
