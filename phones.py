@@ -2,6 +2,7 @@
 import kdtree
 import sys
 import smallestcircle
+import math
 
 """ Cordless Phones
     Takes a set of points and finds the maximum range of only 11.
@@ -102,11 +103,12 @@ def find_radii_set(tree, max_phones, points):
 # Main method runs all the input and methods called.
 #
 def main():
-    #Make a list of point lists
+    # Make a list of point lists
     points = []
     max_phones = 12
+    size_of_phone = 0.02
 
-    #Loop until no further input, adding in each point
+    # Loop until no further input, adding in each point
     while (True):
         try:
             inp = input()
@@ -118,7 +120,7 @@ def main():
             ps = inp.split(" ")
             points.append(ps)
 
-    #Print out all the points in the 2D list
+    # Print out all the points in the 2D list
     for p in points:
         x = p[0]
         y = p[1]
@@ -167,10 +169,13 @@ def main():
     print("x:", min_r[0], "\ny:", min_r[1], "\nr:", min_r[2])
 
     # Decrease minimum of 12 to get maximum of 11
-    max_eleven = (min_r[2] - 0.1)
+    max_eleven = (min_r[2] - (size_of_phone / 2))
+
+    # Round to 2 dp but round down so as not to overwrite the previous decrement.
+    max_eleven = math.floor(max_eleven * 100)/100.0
 
     print("\nGotta remove that 12th point though..\nRange now:", max_eleven)
-    print("\nMaximum range:", "%0.2f" % max_eleven, "metres")
+    print("\nMaximum range:", max_eleven, "metres")
 
 if __name__ == '__main__':
     main()
