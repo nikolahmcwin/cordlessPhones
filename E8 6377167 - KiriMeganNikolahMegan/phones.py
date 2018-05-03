@@ -114,15 +114,11 @@ def main():
             inp = input()
         except EOFError:
             break
-        if inp == "Telephone sites" or inp == "":
+        if inp == "Telephone sites":
             continue
         else:
             ps = inp.split(" ")
-            if len(ps) == 2:
-                points.append(ps)
-            else:
-                ps = inp.split("\t")
-
+            points.append(ps)
 
     # Print out all the points in the 2D list
     for p in points:
