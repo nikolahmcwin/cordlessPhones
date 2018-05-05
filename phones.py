@@ -17,12 +17,15 @@ import math
 #
 def pull_coordinate(node):
     pstr =  str(node[0])
-     
     string_cords = pstr[12:(len(pstr)-3)]
+    
     first_q = string_cords.find(',') - 1
     second_q = first_q + 4
 
-    xstr = string_cords[:first_q-1]
+    if first_q == 1:
+        xstr = string_cords[first_q-1]
+    else:
+        xstr = string_cords[:first_q-1]
     ystr = string_cords[second_q:]
     
     pts = []
@@ -114,15 +117,25 @@ def main():
             inp = input()
         except EOFError:
             break
-        if inp == "Telephone sites" or inp == "":
+        if inp == "Telephone sites" or inp == "Telephone Sites":
             continue
         else:
+            '''
+            # Old incorrect input assuming only spaces
             ps = inp.split(" ")
+            points.append(ps)
+            '''
+            # Split input line on any whitespace character
+            ps = inp.split()
             if len(ps) == 2:
+                try:
+                    # Check that inputt is actually a float
+                    inNumberfloat = float(ps[0])
+                    inNumberfloat1 = float(ps[1])
+                    
+                except ValueError:
+                    continue
                 points.append(ps)
-            else:
-                ps = inp.split("\t")
-
 
     # Print out all the points in the 2D list
     for p in points:
