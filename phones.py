@@ -53,7 +53,7 @@ def pull_all_coordinates(all_nodes):
 # Return a list [[x, y], [x, y]] of these minimum points.
 #
 def find_minimum_set(tree, max_phones, points):
-    #Set the two arrays as arbitrarily the first check
+    # et the two arrays as arbitrarily the first check
     n = points[0]
 
     # 2D array [[node, dist], [node, dist]]
@@ -110,39 +110,40 @@ def main():
     points = []
     max_phones = 12
     size_of_phone = 0.02
+    title = "Telephone sites"
 
-    # Loop until no further input, adding in each point
-    j = 0
-    while (True):
+    # Check the user entered a file to open
+    if len(sys.argv) != 2:
+        print("You need to enter the file name to open.")
+        sys.exit()
+
+    # Open the file to read    
+    f = open(sys.argv[1], "r")  
+    f1 = f.readlines()
+
+    # Loop until no further input, adding in each point line by line
+    for inp in f1:
         
-        
-        try:
-            inp = input()
-            if j == 0:
-                j += 1
-                continue
-            else:
-                '''
-                # Old incorrect input assuming only spaces
-                ps = inp.split(" ")
+        if inp == title:
+            # Ignore the first line of 'Telephone sites'
+            continue
+        else:
+            '''
+            # Old incorrect input assuming only spaces
+            ps = inp.split(" ")
+            points.append(ps)
+            '''
+            # Split input line on any whitespace character
+            ps = inp.split()
+            if len(ps) == 2:
+                try:
+                    # Check that input is actually a float
+                    inNumberfloat = float(ps[0])
+                    inNumberfloat1 = float(ps[1])
+                    
+                except ValueError:
+                    continue
                 points.append(ps)
-                '''
-                # Split input line on any whitespace character
-                #print(inp)
-                ps = inp.split()
-                if len(ps) == 2:
-                    try:
-                        # Check that inputt is actually a float
-                        inNumberfloat = float(ps[0])
-                        inNumberfloat1 = float(ps[1])
-                        
-                    except ValueError:
-                        continue
-                    points.append(ps)
-                j += 1
-        except EOFError:
-            break
-        
 
     # Print out all the points in the 2D list
     for p in points:
