@@ -112,30 +112,37 @@ def main():
     size_of_phone = 0.02
 
     # Loop until no further input, adding in each point
+    j = 0
     while (True):
+        
+        
         try:
             inp = input()
+            if j == 0:
+                j += 1
+                continue
+            else:
+                '''
+                # Old incorrect input assuming only spaces
+                ps = inp.split(" ")
+                points.append(ps)
+                '''
+                # Split input line on any whitespace character
+                #print(inp)
+                ps = inp.split()
+                if len(ps) == 2:
+                    try:
+                        # Check that inputt is actually a float
+                        inNumberfloat = float(ps[0])
+                        inNumberfloat1 = float(ps[1])
+                        
+                    except ValueError:
+                        continue
+                    points.append(ps)
+                j += 1
         except EOFError:
             break
-        if inp == "Telephone sites" or inp == "Telephone Sites":
-            continue
-        else:
-            '''
-            # Old incorrect input assuming only spaces
-            ps = inp.split(" ")
-            points.append(ps)
-            '''
-            # Split input line on any whitespace character
-            ps = inp.split()
-            if len(ps) == 2:
-                try:
-                    # Check that inputt is actually a float
-                    inNumberfloat = float(ps[0])
-                    inNumberfloat1 = float(ps[1])
-                    
-                except ValueError:
-                    continue
-                points.append(ps)
+        
 
     # Print out all the points in the 2D list
     for p in points:
@@ -184,7 +191,10 @@ def main():
 
     print("Smallest enlosing circle found!")
     print("x:", min_r[0], "\ny:", min_r[1], "\nr:", min_r[2])
+    max11 = math.floor(min_r[2] * 100)/100.0
+    print("\nMaximum range:", max11, "metres")
 
+    '''
     # Decrease minimum of 12 to get maximum of 11
     max_eleven = (min_r[2] - (size_of_phone / 2))
 
@@ -193,6 +203,7 @@ def main():
 
     print("\nGotta remove that 12th point though..\nRange now:", max_eleven)
     print("\nMaximum range:", max_eleven, "metres")
+    '''
 
 if __name__ == '__main__':
     main()
