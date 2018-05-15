@@ -24,10 +24,14 @@ def pull_coordinate(node):
 
     if first_q == 1:
         xstr = string_cords[first_q-1]
+    elif first_q == 2:
+        xstr = string_cords[:first_q]
     else:
-        xstr = string_cords[:first_q-1]
+        xstr = string_cords[:first_q]
+
     ystr = string_cords[second_q:]
     
+    #print("xstr", xstr, "ystr", ystr)
     pts = []
     pts.append(float(xstr))
     pts.append(float(ystr))
@@ -43,8 +47,10 @@ def pull_all_coordinates(all_nodes):
     nn_points = []
     while i < len(all_nodes):
         nn_p = pull_coordinate(all_nodes[i])
+        #print("in pull all", nn_p)
         nn_points.append(nn_p)
         i+=1
+    #print(nn_points)
     return nn_points
 
 #
@@ -53,7 +59,7 @@ def pull_all_coordinates(all_nodes):
 # Return a list [[x, y], [x, y]] of these minimum points.
 #
 def find_minimum_set(tree, max_phones, points):
-    # et the two arrays as arbitrarily the first check
+    # Set the two arrays as arbitrarily the first check
     n = points[0]
 
     # 2D array [[node, dist], [node, dist]]
@@ -87,16 +93,21 @@ def find_radii_set(tree, max_phones, points):
 
     while i < len(points):
         curr_pt = points[i]
-        
         # 2D array [[node, dist], [node, dist]] of the knn of the point we are checking
         curr_nn_nodes = tree.search_knn(curr_pt, max_phones)
-        
         # 2D array [[x, y], [x, y]] of the points of these knn
         curr_points = pull_all_coordinates(curr_nn_nodes)
 
+        x = curr_pt[0]
+        y = curr_pt[1]
+        #print(x, y, sep="\t")
+        #print(curr_points)
+        '''
         copy = curr_points[:]
         c = smallestcircle.make_circle(copy)
-
+        '''
+        c = smallestcircle.make_circle(curr_points)
+        #print(c)
         all_r.append(c)
         i+=1
 
@@ -111,23 +122,44 @@ def main():
     max_phones = 12
     size_of_phone = 0.02
     title = "Telephone sites"
-
+    '''
     # Check the user entered a file to open
     if len(sys.argv) != 2:
         print("You need to enter the file name to open.")
         sys.exit()
-
     # Open the file to read    
     f = open(sys.argv[1], "r")  
     f1 = f.readlines()
-
     # Loop until no further input, adding in each point line by line
     for inp in f1:
-        
         if inp == title:
             # Ignore the first line of 'Telephone sites'
             continue
         else:
+            # Split input line on any whitespace character
+            ps = inp.split()
+            if len(ps) == 2:
+                try:
+                    # Check that input is actually a float
+                    inNumberfloat = float(ps[0])
+                    inNumberfloat1 = float(ps[1])
+                except ValueError:
+                    continue
+                points.append(ps)
+    '''
+
+     # Loop until no further input, adding in each point
+
+    while (True):
+        try:
+            inp = input()
+        except EOFError:
+            break
+
+        if title in inp:
+            continue
+        else:
+            #print(inp)
             '''
             # Old incorrect input assuming only spaces
             ps = inp.split(" ")
@@ -137,10 +169,9 @@ def main():
             ps = inp.split()
             if len(ps) == 2:
                 try:
-                    # Check that input is actually a float
+                    # Check that inputt is actually a float
                     inNumberfloat = float(ps[0])
                     inNumberfloat1 = float(ps[1])
-                    
                 except ValueError:
                     continue
                 points.append(ps)
@@ -190,7 +221,7 @@ def main():
             min_r = curr_r
         i += 1
 
-    print("Smallest enlosing circle found!")
+    print("Smallest enclosing circle found!")
     print("x:", min_r[0], "\ny:", min_r[1], "\nr:", min_r[2])
     max11 = math.floor(min_r[2] * 100)/100.0
     print("\nMaximum range:", max11, "metres")
